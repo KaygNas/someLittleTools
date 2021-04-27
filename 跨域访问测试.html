@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>跨域访问测试</title>
+    <style>
+      form {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+      }
+
+      div {
+        display: flex;
+        width: 600px;
+        padding: 8px;
+      }
+
+      input,
+      textarea {
+        flex: 1 0 auto;
+      }
+
+      textarea {
+        min-height: 200px;
+      }
+
+      label {
+        flex: 0 0 100px;
+      }
+
+      button {
+        align-self: flex-end;
+        min-width: 66px;
+      }
+    </style>
+  </head>
+  <body>
+    <form onsubmit="sendRequest(event)">
+      <div>
+        <label for="method-select">请求方法:</label>
+        <select name="method" id="method-select">
+          <option value="GET">GET</option>
+          <option value="POST">POST</option>
+          <option value="PUT">PUT</option>
+          <option value="DELETE">DELETE</option>
+        </select>
+      </div>
+      <div>
+        <label for="url">URL:</label>
+        <input type="text" id="url" name="url" />
+      </div>
+      <div>
+        <label for="data">请求体数据:</label>
+        <textarea type="textarea" id="data" name="data"></textarea>
+      </div>
+      <button type="submit">提交</button>
+    </form>
+  </body>
+
+  <script>
+    function sendRequest(event) {
+      event.preventDefault()
+      console.log(event)
+      const form = event.target
+      const formData = new FormData(form)
+      const url = formData.get("url")
+      const method = formData.get("method")
+      const data = JSON.parse(formData.get("data"))
+      console.log(data)
+
+      const headers = new Headers()
+      headers.append("Content-Type", "application/json; charset=utf-8")
+
+      const init = new Request(url, { method, headers, body: JSON.stringify(data) })
+      fetch(init)
+    }
+  </script>
+</html>
